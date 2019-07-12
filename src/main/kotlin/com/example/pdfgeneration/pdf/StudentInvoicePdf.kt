@@ -21,9 +21,10 @@ class StudentInvoicePdf {
         val document = Document()
         val out = ByteArrayOutputStream()
 
+        //FileOutputStream("/home/ramesh/HelloWorld.pdf")
         try {
 
-            PdfWriter.getInstance(document, FileOutputStream("/home/ramesh/HelloWorld.pdf"))
+            PdfWriter.getInstance(document, out)
             document.open()
 
             // Add Text to PDF file ->

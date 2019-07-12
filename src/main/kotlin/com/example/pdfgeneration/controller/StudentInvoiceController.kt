@@ -2,9 +2,16 @@ package com.example.pdfgeneration.controller
 
 import com.example.pdfgeneration.model.StudentInvoice
 import com.example.pdfgeneration.pdf.StudentInvoicePdf
+import com.example.pdfgeneration.pdf.StudentPdfReport
 import com.example.pdfgeneration.repository.StudentInvoiceJpaRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.io.InputStreamResource
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.http.HttpHeaders
+
+
 
 @RestController
 class StudentInvoiceController {
@@ -14,6 +21,8 @@ class StudentInvoiceController {
 
 
     var pdf = StudentInvoicePdf()
+
+    var pdfreport = StudentPdfReport()
 
     @PostMapping("/createStudentInvoice")
     fun create(@RequestBody studentInvoice: StudentInvoice): String? {
@@ -31,16 +40,21 @@ class StudentInvoiceController {
     }
 
     @GetMapping("generatePDFreport/{id}")
-    fun pdfReport(@PathVariable("id") id:String) :String{
+    fun pdfReport(@PathVariable("id") id:String) :ResponseEntity<*>{
 
 
      val   invoice = studentInvoiceJpaRepository?.findById_id(id)
 
-        if (invoice != null) {
-            pdf.pdfGeneration(invoice)
-        }
 
-        return "Pdf report"
+        if (invoice != null) {
+           var bytes = pdfreport.generatePdf(invoice)
+           //var bytes = pdf.pdfGeneration(invoice)
+        }
+        val headers = HttpHeaders()
+        headers.add("Content-Disposition", "inline; filename=studentInvoice.pdf")
+        //return "Pdf report"
+        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(InputStreamResource(pdfreport.generatePdf(invoice!!
+        )))
     }
 
 }

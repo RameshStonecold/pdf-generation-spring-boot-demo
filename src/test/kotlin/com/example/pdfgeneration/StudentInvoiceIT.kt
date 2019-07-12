@@ -10,6 +10,7 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
+import java.time.LocalDate
 import java.util.*
 
 @RunWith(SpringRunner::class)
@@ -53,6 +54,8 @@ class StudentInvoiceIT {
 
         val studentInvoice = StudentInvoice()
         studentInvoice.id = UUID.randomUUID().toString()
+        studentInvoice.invoiceNo="1RJ5-35JG-4689"
+        studentInvoice.createdDate= LocalDate.now()
         studentInvoice.batchId= "1112234"
         studentInvoice.batchName="Jawahar"
         studentInvoice.centerId= "990071"
